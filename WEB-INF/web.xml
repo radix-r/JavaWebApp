@@ -11,13 +11,6 @@
    </description>
 
    <!-- Servlet definitions -->
-    <servlet>
-      <servlet-name>trial</servlet-name>
-      <description>
-         A simple servlet that handles an HTTP get request.
-      </description>
-      <servlet-class> SurveyServlet  </servlet-class>
-   </servlet>
 
    <servlet>
       <servlet-name>welcome1</servlet-name>
@@ -27,53 +20,7 @@
       <servlet-class> WelcomeServlet  </servlet-class>
    </servlet>
 
-   <servlet>
-      <servlet-name>currenttime</servlet-name>
-      <description>
-         A simple servlet that handles an HTTP get request.
-      </description>
-      <servlet-class>CurrentTimeServlet </servlet-class>
-   </servlet>
 
-
-   <servlet>
-       <servlet-name>welcome2</servlet-name>
-
-	<description>
-	   A more personal welcome servlet
-	</description>
-
-	<servlet-class>
-	   WelcomeServlet2
-	</servlet-class>
-   </servlet>
-
-   <servlet>
-       <servlet-name>welcome3</servlet-name>
-
-	<description>
-	   A more personal welcome serlvet - using a post action
-	</description>
-
-	<servlet-class>
-	   WelcomeServlet3
-	</servlet-class>
-   </servlet>
-
-
-   <servlet>
-       <servlet-name>redirect</servlet-name>
-
-	<description>
-	   A redirection servlet
-	</description>
-
-	<servlet-class>
-	   ReDirectionServlet
-	</servlet-class>
-    </servlet>
-	
-	
     <servlet>
     		<servlet-name>colorsurvey</servlet-name>
 
@@ -92,7 +39,7 @@
     		
     		<init-param>
     		    <param-name>databaseName</param-name>
-    		    <param-value>jdbc:mysql://localhost:3312/colorsurvey</param-value>
+    		    <param-value>jdbc:mysql://localhost:3306/colorsurvey</param-value>
     		</init-param>
     		
     		<init-param>
@@ -106,110 +53,18 @@
     		</init-param>
    </servlet>
 
-   <servlet>
-	<servlet-name>searcheng</servlet-name>
-	<servlet-class>searchEngine</servlet-class>
-   </servlet>
-
-   <servlet>
-     <servlet-name>cookies</servlet-name>
-     <servlet-class>RepeatVisitor</servlet-class>
-   </servlet> 
-   
-   <servlet>
-     <servlet-name>cookietest</servlet-name>
-     <servlet-class>CookieTest</servlet-class>
-   </servlet> 
-   
-   <servlet>
-     <servlet-name>cookieaccess</servlet-name>
-     <servlet-class>ClientAccessCounts</servlet-class>
-   </servlet> 
-
-   <servlet>
-      <servlet-name>sessions</servlet-name>
-      <servlet-class>ShowSession</servlet-class>
-   </servlet>
-
-  <servlet>
-      <servlet-name>spreadsheet</servlet-name>
-      <servlet-class>ApplesAndOranges</servlet-class>
-   </servlet>
-
-
-  <servlet>
-      <servlet-name>pictures</servlet-name>
-      <servlet-class>ImageContent</servlet-class>
-   </servlet>
-
-   
-   
-   
-
    <!-- Servlet mappings -->
-   <servlet-mapping>
-      <servlet-name>trial</servlet-name>
-      <url-pattern>/trial</url-pattern>
-   </servlet-mapping>
 
    <servlet-mapping>
       <servlet-name>welcome1</servlet-name>
       <url-pattern>/welcome1</url-pattern>
    </servlet-mapping>
-   
-   
-   
-   
-   
-   
-   <servlet-mapping>
-      <servlet-name>currenttime</servlet-name>
-      <url-pattern>/currenttime</url-pattern>
-   </servlet-mapping>
-   <servlet-mapping>
-	<servlet-name>welcome2</servlet-name>
-	<url-pattern>/welcome2</url-pattern>
-   </servlet-mapping>
-   <servlet-mapping>
-	<servlet-name>welcome3</servlet-name>
-	<url-pattern>/welcome3</url-pattern>
-   </servlet-mapping>
-   <servlet-mapping>
-	<servlet-name>redirect</servlet-name>
-	<url-pattern>/redirect</url-pattern>
-   </servlet-mapping>
-   <servlet-mapping>
+
+    <servlet-mapping>
 	<servlet-name>colorsurvey</servlet-name>
 	<url-pattern>/colorsurvey</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-	<servlet-name>searcheng</servlet-name>
-	<url-pattern>/searcheng</url-pattern>
-   </servlet-mapping>
-   <servlet-mapping>
-     <servlet-name>cookies</servlet-name>
-     <url-pattern>/cookies</url-pattern>
-   </servlet-mapping> 
-   <servlet-mapping>
-     <servlet-name>cookietest</servlet-name>
-     <url-pattern>/cookietest</url-pattern>
-   </servlet-mapping> 
-   <servlet-mapping>
-     <servlet-name>cookieaccess</servlet-name>
-     <url-pattern>/cookieaccess</url-pattern>
-   </servlet-mapping> 
-   <servlet-mapping>
-      <servlet-name>sessions</servlet-name>
-      <url-pattern>/sessions</url-pattern>
-   </servlet-mapping>
-   <servlet-mapping>
-      <servlet-name>spreadsheet</servlet-name>
-      <url-pattern>/spreadsheet</url-pattern>
-   </servlet-mapping>
-   <servlet-mapping>
-      <servlet-name>pictures</servlet-name>
-      <url-pattern>/pictures</url-pattern>
-   </servlet-mapping>
+
 
 </web-app>
 
