@@ -22,14 +22,14 @@
 
 
     <servlet>
-    		<servlet-name>colorsurvey</servlet-name>
+    		<servlet-name>project4</servlet-name>
 
     		<description>
-    	 	    A color preference survey servlet application
+    	 	    A database servlet for project4
     		</description>
 
     		<servlet-class>
-    		   SurveyServlet
+                Project4
     		</servlet-class>
     		
     		<init-param>
@@ -39,7 +39,7 @@
     		
     		<init-param>
     		    <param-name>databaseName</param-name>
-    		    <param-value>jdbc:mysql://localhost:3306/colorsurvey</param-value>
+    		    <param-value>jdbc:mysql://localhost:3306/project4</param-value>
     		</init-param>
     		
     		<init-param>
@@ -53,7 +53,39 @@
     		</init-param>
    </servlet>
 
-   <!-- Servlet mappings -->
+    <servlet>
+        <servlet-name>colorsurvey</servlet-name>
+
+        <description>
+            A color preference survey servlet application
+        </description>
+
+        <servlet-class>
+            SurveyServlet
+        </servlet-class>
+
+        <init-param>
+            <param-name>databaseDriver</param-name>
+            <param-value>com.mysql.cj.jdbc.Driver</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>databaseName</param-name>
+            <param-value>jdbc:mysql://localhost:3306/colorsurvey</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>username</param-name>
+            <param-value>root</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>password</param-name>
+            <param-value>root</param-value>
+        </init-param>
+    </servlet>
+
+    <!-- Servlet mappings -->
 
    <servlet-mapping>
       <servlet-name>welcome1</servlet-name>
@@ -65,6 +97,10 @@
 	<url-pattern>/colorsurvey</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>project4</servlet-name>
+        <url-pattern>/project4</url-pattern>
+    </servlet-mapping>
 
 </web-app>
 
