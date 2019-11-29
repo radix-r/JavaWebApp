@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Project4 {
+public class Project4 extends HttpServlet {
     private Connection connection;
     private Statement statement;
 
@@ -31,15 +31,8 @@ public class Project4 {
         // attempt database connection and create Statement
         try
         {
-  /*       Class.forName( config.getInitParameter( "databaseDriver" ) );
-           connection = DriverManager.getConnection(
-           config.getInitParameter( "databaseName" ),
-           config.getInitParameter( "username" ),
-           config.getInitParameter( "password" ) );
-    */
-
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/colorsurvey", "root", "root" );
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/project4", "root", "root" );
             // create Statement to query database
             statement = connection.createStatement();
         } // end try
@@ -60,80 +53,106 @@ public class Project4 {
         // set up response to client
         response.setContentType( "text/html" );
         PrintWriter out = response.getWriter();
+        String defaultCommand = "select * from suppliers";
+        String result = "";
 
+        String sql = request.getParameter("input");
+        if (sql.compareTo("")==0){
+            sql = defaultCommand;
+        }
+
+        try {
+            // determine if command update or query
+            String[] tokens = sql.split(" ");
+            if (tokens[0].toLowerCase().compareTo("select")== 0){
+                ResultSet resultsRS = statement.executeQuery(sql);
+                resultsRS.getMetaData();
+                while ( resultsRS.next() )
+                {
+                    int len = resultsRS.getFetchSize();
+                    for (int i = 1; i <= len; i++) {
+                        result += resultsRS.getString(i);
+                        result+=": ";
+                    }
+                    result+="\n";
+
+                } // end while
+            }
+            else {
+                statement.executeUpdate(sql);
+            }
+
+            printPage(out, sql, result);
+//        try
+//        {
+//            // update total for current survey response
+//            sql = "UPDATE surveyresults SET votes = votes + 1 " +
+//                    "WHERE id = " + value;
+//
+//
+//            // get total of all survey responses
+//            sql = "SELECT sum( votes ) FROM surveyresults";
+//            ResultSet totalRS = statement.executeQuery( sql );
+//            totalRS.next(); // position to first record
+//            int total = totalRS.getInt( 1 );
+//
+//            // get results
+//            sql = "SELECT surveyoption, votes, id FROM surveyresults " +
+//                    "ORDER BY id";
+
+//            int votes;
+//
+//            while ( resultsRS.next() )
+//            {
+//                out.print( resultsRS.getString( 1 ) );
+//                out.print( ": " );
+//                votes = resultsRS.getInt( 2 );
+//                out.printf( "%.2f", ( double ) votes / total * 100 );
+//                out.print( "%\t  responses: " );
+//                out.println( votes );
+//            } // end while
+//
+//            resultsRS.close();
+//
+//            out.println();
+//            out.print( "Total number of responses: " );
+//            out.print( total );
+//
+//            // end HTML document
+//            out.println( "</pre></body></html>" );
+//            out.close();
+//        } // end try
+//        // if database exception occurs, return error page
+//        catch ( SQLException sqlException )
+//        {
+//
+//            sqlException.printStackTrace();
+//            out.println( "<title>Error</title>" );
+//            out.println( "</head>" );
+//            out.println( "<body><p>Database error occurred. " );
+//            out.println( "Try again later.</p></body></html>" );
+//            out.close();
+//        } // end catch
+        }catch (SQLException sqlException){
+            // show error on page
+            printPage(out, sql, "error");
+        }
+    } // end method doPost
+
+    private void printPage(PrintWriter out,String sql, String result) {
         // start HTML document
         out.println(
                 "<html>" );
         // head section of document
-        out.println( "<head>" );
-        // read current survey response
-        int value =
-                Integer.parseInt( request.getParameter( "color" ) );
-        String sql;
-        // attempt to process a vote and display current results
-        try
-        {
-            // update total for current survey response
-            sql = "UPDATE surveyresults SET votes = votes + 1 " +
-                    "WHERE id = " + value;
-            statement.executeUpdate( sql );
-
-            // get total of all survey responses
-            sql = "SELECT sum( votes ) FROM surveyresults";
-            ResultSet totalRS = statement.executeQuery( sql );
-            totalRS.next(); // position to first record
-            int total = totalRS.getInt( 1 );
-
-            // get results
-            sql = "SELECT surveyoption, votes, id FROM surveyresults " +
-                    "ORDER BY id";
-            ResultSet resultsRS = statement.executeQuery( sql );
-            out.println( "<pre><title>Thank you!</title>" );
-            out.println( "</head>" );
-
-            out.println( "<body>" );
-            out.println ("<body bgcolor=white background=images/background.jpg lang=EN-US link=blue vlink=blue >");
-            out.println ("<body style='tab-interval:.5in'>");
-            out.println ("<font size = 4> <b>");
-            out.println ("<p>Thank you for participating in the CNT 4714 <span style='color:blue'>C</span><span style='color:red'>O</span><span style='color:green'>L</span><span style='color:yellow'>O</span><span style='color:orange'>R</span> Preference Survey." );
-            out.println ("</b><br>");
-            out.println ("</font>");
-            out.println ("<br />\t Current Results:</p><pre>" );
-
-            // process results
-            int votes;
-
-            while ( resultsRS.next() )
-            {
-                out.print( resultsRS.getString( 1 ) );
-                out.print( ": " );
-                votes = resultsRS.getInt( 2 );
-                out.printf( "%.2f", ( double ) votes / total * 100 );
-                out.print( "%\t  responses: " );
-                out.println( votes );
-            } // end while
-
-            resultsRS.close();
-
-            out.println();
-            out.print( "Total number of responses: " );
-            out.print( total );
-
-            // end HTML document
-            out.println( "</pre></body></html>" );
-            out.close();
-        } // end try
-        // if database exception occurs, return error page
-        catch ( SQLException sqlException )
-        {
-            sqlException.printStackTrace();
-            out.println( "<title>Error</title>" );
-            out.println( "</head>" );
-            out.println( "<body><p>Database error occurred. " );
-            out.println( "Try again later.</p></body></html>" );
-            out.close();
-        } // end catch
-    } // end method doPost
+        out.println( "<head></head>" );
+        out.println( "<body>");
+        out.println(sql);
+        out.println( "<br>");
+        out.println(result);
+        out.println("</body>");
+        out.println("</html>");
+        out.close();
+    }
 
     // close SQL statements and database when servlet terminates
     public void destroy()
