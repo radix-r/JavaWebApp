@@ -1,3 +1,7 @@
+# Database Webapp 
+
+Screen shots of usage in screenShots folder
+
 ## To compile:
 1) cd to WEB-INF/classes folder
 
