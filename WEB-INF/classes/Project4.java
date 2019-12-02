@@ -66,89 +66,75 @@ public class Project4 extends HttpServlet {
             String[] tokens = sql.split(" ");
             if (tokens[0].toLowerCase().compareTo("select")== 0){
                 ResultSet resultsRS = statement.executeQuery(sql);
-                resultsRS.getMetaData();
+                ResultSetMetaData meta = resultsRS.getMetaData();
+                int len = meta.getColumnCount();
+                result+= "<table BORDER=1 CELLPADDING=0 CELLSPACING=0 WIDTH=100%>";
+                result += "<tr>";
+                for (int i = 1; i <= len; i++) {
+                    result += "<th>"+meta.getColumnName(i)+"</th>";
+                }
+                result += "</tr>";
+
                 while ( resultsRS.next() )
                 {
-                    int len = resultsRS.getFetchSize();
+                    result += "<tr>";
                     for (int i = 1; i <= len; i++) {
-                        result += resultsRS.getString(i);
-                        result+=": ";
+                        result += "<td><center>"+resultsRS.getString(i)+"</center></td>";
                     }
-                    result+="\n";
+                    result+="</tr>"; // end row
 
                 } // end while
+                result+="</table>";
             }
             else {
                 statement.executeUpdate(sql);
             }
-
             printPage(out, sql, result);
-//        try
-//        {
-//            // update total for current survey response
-//            sql = "UPDATE surveyresults SET votes = votes + 1 " +
-//                    "WHERE id = " + value;
-//
-//
-//            // get total of all survey responses
-//            sql = "SELECT sum( votes ) FROM surveyresults";
-//            ResultSet totalRS = statement.executeQuery( sql );
-//            totalRS.next(); // position to first record
-//            int total = totalRS.getInt( 1 );
-//
-//            // get results
-//            sql = "SELECT surveyoption, votes, id FROM surveyresults " +
-//                    "ORDER BY id";
-
-//            int votes;
-//
-//            while ( resultsRS.next() )
-//            {
-//                out.print( resultsRS.getString( 1 ) );
-//                out.print( ": " );
-//                votes = resultsRS.getInt( 2 );
-//                out.printf( "%.2f", ( double ) votes / total * 100 );
-//                out.print( "%\t  responses: " );
-//                out.println( votes );
-//            } // end while
-//
-//            resultsRS.close();
-//
-//            out.println();
-//            out.print( "Total number of responses: " );
-//            out.print( total );
-//
-//            // end HTML document
-//            out.println( "</pre></body></html>" );
-//            out.close();
-//        } // end try
-//        // if database exception occurs, return error page
-//        catch ( SQLException sqlException )
-//        {
-//
-//            sqlException.printStackTrace();
-//            out.println( "<title>Error</title>" );
-//            out.println( "</head>" );
-//            out.println( "<body><p>Database error occurred. " );
-//            out.println( "Try again later.</p></body></html>" );
-//            out.close();
-//        } // end catch
         }catch (SQLException sqlException){
             // show error on page
-            printPage(out, sql, "error");
+            // printStackTrace();
+            printPage(out, sql, sqlException.toString());
         }
     } // end method doPost
 
     private void printPage(PrintWriter out,String sql, String result) {
         // start HTML document
-        out.println(
-                "<html>" );
-        // head section of document
-        out.println( "<head></head>" );
-        out.println( "<body>");
+        out.println("<!DOCTYPE html>");
+        out.println("<!-- Survey.html -->");
+        out.println("<html lang='en'>");
+        out.println("<head>");
+        out.println("<title>CNT 4714 Remote Database</title>");
+        out.println("<style>");
+        out.println("<!--");
+        out.println("body { background-color: grey; color:white; font-size: 2em; font-family:mono; font-size: 1.2em;text-align: center;}");
+        out.println("input[type='submit'] {background-color:black; color:lime; font-size:0.9em; }");
+        out.println("h1 { font-weight: bold; font-size 1.0em;}");
+        out.println("h2 {}");
+        out.println("textarea {background-color: black; color: lime; font-weight: bold}");
+        out.println("-->   ");
+        out.println("</style>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<br >");
+        out.println("<form action = '../project4/project4'  method = 'post'>");
+        out.println("<h1> Welcome to the Fall 2019 Project 4 Enterprise System</h1>");
+        out.println("<h2>A Remote Database Management System</h2>");
+        out.println("<hr color='white'>");
+        out.println("<p>");
+        out.println("You are connected to the Project 4 Enterprise System database. Please enter any valid SQL query or update statement.<br>");
+        out.println("If no query/update command is initially provided the Execute button will display all supplier information in the database.<br>");
+        out.println("all execution results will appear below.<br>");
+        out.println("<br>");
+        out.println("<textarea name='input' rows='20' cols='60' placeholder='select * from suppliers'>");
         out.println(sql);
-        out.println( "<br>");
+        out.println("</textarea>");
+        out.println("<br>");
+        out.println("</p>");
+        out.println("<p><input type = 'submit' value = 'Submit' /></p>");
+        out.println("<hr color='white'>");
+        out.println(" <h2>Database Results</h2>");
         out.println(result);
+        out.println("</form>");
         out.println("</body>");
         out.println("</html>");
         out.close();
